@@ -40,3 +40,30 @@ def train(net,train_iter,loss,epochs,lr):
 net = get_net()
 if __name__ == '__main__':
     train(net,train_iter,loss,5,0.01)
+
+#预测
+# onestep_preds = net(features)
+# d2l.plot([time, time[tau:]],
+#          [x.detach().numpy(), onestep_preds.detach().numpy()], 'time',
+#          'x', legend=['data', '1-step preds'], xlim=[1, 1000],
+#          figsize=(6, 3))
+
+#k步预测
+max_steps = 64
+
+features = torch.zeros((T - tau - max_steps + 1, tau + max_steps))
+# 列i（i<tau）是来自x的观测，其时间步从（i）到（i+T-tau-max_steps+1）
+for i in range(tau):
+    features[:, i] = x[i: i + T - tau - max_steps + 1]
+
+# 列i（i>=tau）是来自（i-tau+1）步的预测，其时间步从（i）到（i+T-tau-max_steps+1）
+for i in range(tau, tau + max_steps):
+    features[:, i] = net(features[:, i - tau:i]).reshape(-1)
+
+steps = (1, 4, 16, 64)
+d2l.plot([time[tau + i - 1: T - max_steps + i] for i in steps],
+         [features[:, (tau + i - 1)].detach().numpy() for i in steps], 'time', 'x',
+         legend=[f'{i}-step preds' for i in steps], xlim=[5, 1000],
+         figsize=(6, 3))
+
+
