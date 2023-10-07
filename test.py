@@ -53,3 +53,16 @@ import pandas as pd
 # x.requires_grad_(True)
 #
 # y = 2 * torch.dot(x,x)
+# matrix =[[2,1,3],[6,5,4],[7,8,9]]
+#
+# n = len(matrix[0])
+# for i in range(n-2,-1,-1):
+#     for j in range(n):
+#         if j == 0:
+#             matrix[i][j] += min(matrix[i+1][j] , matrix[i+1][j+1])
+#         elif j == n-1:
+#             matrix[i][j] += min(matrix[i+1][j] , matrix[i+1][j-1])
+#         else:
+#             matrix[i][j] += min(matrix[i+1][j-1] , matrix[i+1][j] , matrix[i+1][j+1])
+#
+# print(matrix)
